@@ -1,0 +1,117 @@
+[
+    {
+        "title": "Inception",
+        "releaseYear": 2010,
+        "genre": "Sci-Fi",
+        "duration": 148,
+        "ratingAvg": 4.8,
+        "ratingQuantity": 2450,
+        "image": "movie-1.jpg",
+        "price": 14.99,
+        "summary": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+        "watched": true,
+        "watched_date": [
+            "2025-03-12T20:00:00.000Z",
+            "2026-01-05T18:30:00.000Z"
+        ]
+    },
+    {
+        "title": "The Dark Knight",
+        "releaseYear": 2008,
+        "genre": "Action",
+        "duration": 152,
+        "ratingAvg": 4.9,
+        "ratingQuantity": 3120,
+        "image": "movie-2.jpg",
+        "price": 12.99,
+        "summary": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        "watched": true,
+        "watched_date": [
+            "2024-11-20T21:15:00.000Z"
+        ]
+    },
+    {
+        "title": "Spirited Away",
+        "releaseYear": 2001,
+        "genre": "Animation",
+        "duration": 125,
+        "ratingAvg": 4.7,
+        "ratingQuantity": 1890,
+        "image": "movie-3.jpg",
+        "price": 19.99,
+        "summary": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
+        "watched": false,
+        "watched_date": []
+    },
+    {
+        "title": "Parasite",
+        "releaseYear": 2019,
+        "genre": "Thriller",
+        "duration": 132,
+        "ratingAvg": 4.6,
+        "ratingQuantity": 1540,
+        "image": "movie-4.jpg",
+        "price": 14.99,
+        "summary": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+        "watched": true,
+        "watched_date": [
+            "2025-08-30T19:40:00.000Z"
+        ]
+    },
+    {
+        "title": "Interstellar",
+        "releaseYear": 2014,
+        "genre": "Adventure",
+        "duration": 169,
+        "ratingAvg": 4.7,
+        "ratingQuantity": 2200,
+        "image": "movie-5.jpg",
+        "price": 9.99,
+        "summary": "When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.",
+        "watched": false,
+        "watched_date": []
+    },
+    {
+        "title": "Pulp Fiction",
+        "releaseYear": 1994,
+        "genre": "Crime",
+        "duration": 154,
+        "ratingAvg": 4.5,
+        "ratingQuantity": 1980,
+        "image": "movie-6.jpg",
+        "price": 7.99,
+        "summary": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+        "watched": true,
+        "watched_date": [
+            "2023-05-15T22:00:00.000Z"
+        ]
+    },
+    {
+        "title": "Whiplash",
+        "releaseYear": 2014,
+        "genre": "Drama",
+        "duration": 106,
+        "ratingAvg": 4.6,
+        "ratingQuantity": 1420,
+        "image": "movie-7.jpg",
+        "price": 11.99,
+        "summary": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
+        "watched": true,
+        "watched_date": [
+            "2026-10-10T20:15:00.000Z"
+        ]
+    },
+    {
+        "title": "Knives Out",
+        "releaseYear": 2019,
+        "genre": "Comedy",
+        "duration": 130,
+        "ratingAvg": 4.4,
+        "ratingQuantity": 1150,
+        "image": "movie-8.jpg",
+        "price": 14.99,
+        "summary": "A detective investigates the death of the patriarch of an eccentric, combative family.",
+        "watched": false,
+        "watched_date": []
+    }
+]
