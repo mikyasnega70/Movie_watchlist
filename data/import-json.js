@@ -11,6 +11,10 @@ const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.PASSWORD);
 
 mongoose.connect(DB).then((con) => console.log("DB connected successfully"));
 
+// const DB_LOCAL = process.env.DATABASE_LOCAL;
+
+// mongoose.connect(DB_LOCAL).then(con=> console.log('DB connected successfully'));
+
 const importData = async () => {
   try {
     await Movie.create(movies);
