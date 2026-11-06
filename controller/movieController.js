@@ -1,6 +1,7 @@
 const fs = require("fs");
 const Movie = require("../models/movieModels");
 const { match, throws } = require("assert");
+const ApiFeature = require("../utils/apiFeature");
 
 const movies = JSON.parse(
   fs.readFileSync(`${__dirname}/../data/movies.json`, "utf-8"),
@@ -37,45 +38,23 @@ exports.aliastop3 = async (req, res, next) => {
 exports.getAllMovies = async (req, res) => {
   try {
     const reqQuery = { ...req.query, ...req.aliasQuery };
-    const queryObj = { ...req.query };
-    excludeField = ["sort", "fields", "page", "limit"];
-    excludeField.forEach((el) => delete queryObj[el]);
 
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    console.log(queryStr);
+    const features = new ApiFeature(Movie.find(), reqQuery)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
 
-    let query = Movie.find(JSON.parse(queryStr));
+    const movies = await features.query;
 
-    // SORT
-    if (reqQuery.sort) {
-      const sortBy = reqQuery.sort.split(",").join(" ");
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort("-created_at _id");
+    if (reqQuery.page && movies.length === 0) {
+      throw new Error("Page doesn't exist");
     }
 
-    // fields
-    if (reqQuery.fields) {
-      const fields = reqQuery.fields.split(",").join(" ");
-      query = query.select(fields);
-    } else {
-      query = query.select("-__v");
-    }
-
-    // pagination
-    const page = reqQuery.page * 1 || 1;
-    const limit = reqQuery.limit * 1 || 10;
-    const skip = (page - 1) * limit;
-
-    query = query.skip(skip).limit(limit);
-
-    if (reqQuery.page) {
-      if (skip >= (await Movie.countDocuments()))
-        throw new Error("page doesn't exist");
-    }
-
-    const movies = await query;
+    // if (reqQuery.page) {
+    //   if (skip >= (await Movie.countDocuments()))
+    //     throw new Error("page doesn't exist");
+    // }
 
     res.status(200).json({
       status: "success",
@@ -85,6 +64,7 @@ exports.getAllMovies = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: "fail",
       message: err.message,
@@ -179,4 +159,35 @@ exports.deleteMovie = async (req, res) => {
       movie: null,
     },
   });
+};
+
+exports.getYourStat = async (req, res) => {
+  try {
+    const stat = await Movie.aggregate([
+      {
+        $match: { ratingAvg: { $gte: 4.0 } },
+      },
+      {
+        $group: {
+          _id: { $toUpper: { $toString: "$watched" } },
+          numMovies: { $sum: 1 },
+          avgRating: { $avg: "$ratingAvg" },
+          totalPrice: { $sum: "$price" },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        stat,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };

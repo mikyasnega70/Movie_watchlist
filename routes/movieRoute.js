@@ -8,6 +8,8 @@ router
   .route("/top-3-movies")
   .get(movieController.aliastop3, movieController.getAllMovies);
 
+router.route("/getStat").get(movieController.getYourStat);
+
 router
   .route("/")
   .get(movieController.getAllMovies)

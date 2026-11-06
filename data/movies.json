@@ -11,8 +11,9 @@
         "summary": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
         "watched": true,
         "watched_date": [
-            "2025-03-12T20:00:00.000Z",
-            "2026-01-05T18:30:00.000Z"
+            "2023-03-12T20:00:00.000Z",
+            "2025-08-15T18:30:00.000Z",
+            "2025-12-25T21:00:00.000Z"
         ]
     },
     {
@@ -27,6 +28,7 @@
         "summary": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
         "watched": true,
         "watched_date": [
+            "2024-04-10T19:00:00.000Z",
             "2024-11-20T21:15:00.000Z"
         ]
     },
@@ -55,6 +57,7 @@
         "summary": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
         "watched": true,
         "watched_date": [
+            "2025-01-15T14:20:00.000Z",
             "2025-08-30T19:40:00.000Z"
         ]
     },
@@ -98,6 +101,8 @@
         "summary": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
         "watched": true,
         "watched_date": [
+            "2023-02-14T18:00:00.000Z",
+            "2026-06-20T21:30:00.000Z",
             "2026-10-10T20:15:00.000Z"
         ]
     },
@@ -111,6 +116,35 @@
         "image": "movie-8.jpg",
         "price": 14.99,
         "summary": "A detective investigates the death of the patriarch of an eccentric, combative family.",
+        "watched": false,
+        "watched_date": []
+    },
+    {
+        "title": "Spider-Man: Into the Spider-Verse",
+        "releaseYear": 2018,
+        "genre": "Animation",
+        "duration": 117,
+        "ratingAvg": 4.8,
+        "ratingQuantity": 2810,
+        "image": "movie-9.jpg",
+        "price": 12.99,
+        "summary": "Teen Miles Morales becomes the Spider-Man of his universe and must join with five spider-powered individuals from other dimensions to stop a threat for all realities.",
+        "watched": true,
+        "watched_date": [
+            "2024-03-05T19:30:00.000Z",
+            "2026-09-12T20:45:00.000Z"
+        ]
+    },
+    {
+        "title": "Dune",
+        "releaseYear": 2021,
+        "genre": "Sci-Fi",
+        "duration": 155,
+        "ratingAvg": 4.5,
+        "ratingQuantity": 1940,
+        "image": "movie-10.jpg",
+        "price": 14.99,
+        "summary": "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir is haunted by visions of a dark future.",
         "watched": false,
         "watched_date": []
     }
