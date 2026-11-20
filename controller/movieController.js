@@ -191,3 +191,57 @@ exports.getYourStat = async (req, res) => {
     });
   }
 };
+
+exports.yearlyStat = async (req, res) => {
+  try {
+    const Year = req.params.year * 1;
+    const stat = await Movie.aggregate([
+      { $unwind: "$watched_date" },
+      {
+        $match: {
+          watched_date: {
+            $gte: new Date(`${Year}-01-01`),
+            $lte: new Date(`${Year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$watched_date" },
+          numofmovies: { $sum: 1 },
+          movies: { $push: "$title" },
+          totalPrice: { $sum: "$price" },
+          avgRating: { $avg: "$ratingAvg" },
+        },
+      },
+      {
+        $addFields: {
+          month: "$_id",
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+      {
+        $sort: { numofmovies: -1 },
+      },
+      {
+        $limit: 12,
+      },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: {
+        stat,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};

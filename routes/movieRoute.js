@@ -10,6 +10,8 @@ router
 
 router.route("/getStat").get(movieController.getYourStat);
 
+router.route("/stats/:year").get(movieController.yearlyStat);
+
 router
   .route("/")
   .get(movieController.getAllMovies)
