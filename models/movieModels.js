@@ -28,6 +28,12 @@ const movieSchema = new mongoose.Schema(
     ratingAvg: {
       type: Number,
       default: 4,
+      validate: {
+        validator: function (val) {
+          return val >= 1 && val <= 5;
+        },
+        message: "rating must be between 0 and 5",
+      },
     },
     ratingQuantity: {
       type: Number,
@@ -75,6 +81,10 @@ movieSchema.pre("save", function () {
 
 movieSchema.pre(/^find/, function () {
   this.find({ secretMovie: { $ne: true } });
+});
+
+movieSchema.pre("aggregate", function () {
+  this.pipeline().unshift({ $match: { secretMovie: { $ne: true } } });
 });
 
 const Movie = mongoose.model("Movies", movieSchema);
