@@ -2,6 +2,8 @@ const fs = require("fs");
 const Movie = require("../models/movieModels");
 const { match, throws } = require("assert");
 const ApiFeature = require("../utils/apiFeature");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 const movies = JSON.parse(
   fs.readFileSync(`${__dirname}/../data/movies.json`, "utf-8"),
@@ -35,213 +37,174 @@ exports.aliastop3 = async (req, res, next) => {
   next();
 };
 
-exports.getAllMovies = async (req, res) => {
-  try {
-    const reqQuery = { ...req.query, ...req.aliasQuery };
+exports.getAllMovies = catchAsync(async (req, res, next) => {
+  const reqQuery = { ...req.query, ...req.aliasQuery };
 
-    const features = new ApiFeature(Movie.find(), reqQuery)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+  const features = new ApiFeature(Movie.find(), reqQuery)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    const movies = await features.query;
+  const movies = await features.query;
 
-    if (reqQuery.page && movies.length === 0) {
-      throw new Error("Page doesn't exist");
-    }
-
-    // if (reqQuery.page) {
-    //   if (skip >= (await Movie.countDocuments()))
-    //     throw new Error("page doesn't exist");
-    // }
-
-    res.status(200).json({
-      status: "success",
-      result: movies.length,
-      data: {
-        movies,
-      },
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({
-      status: "fail",
-      message: err.message,
-    });
+  if (reqQuery.page && movies.length === 0) {
+    throw new Error("Page doesn't exist");
   }
-};
 
-exports.getMovie = async (req, res) => {
-  try {
-    const movie = await Movie.findById(req.params.id);
-    res.status(200).json({
-      status: "success",
-      data: {
-        movie,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-  //   const id = req.params.id * 1;
-  //   const movie = movies.find((el) => el.id === id);
-};
+  // if (reqQuery.page) {
+  //   if (skip >= (await Movie.countDocuments()))
+  //     throw new Error("page doesn't exist");
+  // }
 
-exports.createMovie = async (req, res) => {
-  try {
-    const newMovie = await Movie.create(req.body);
-    res.status(201).json({
-      status: "success",
-      data: {
-        movie: newMovie,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: "success",
+    result: movies.length,
+    data: {
+      movies,
+    },
+  });
+});
 
-exports.updateMovie = async (req, res) => {
-  try {
-    const movie = await Movie.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    res.status(200).json({
-      status: "success",
-      data: {
-        movie,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+exports.getMovie = catchAsync(async (req, res, next) => {
+  const movie = await Movie.findById(req.params.id);
+
+  if (!movie) {
+    throw new AppError(`can't find movie with this id`, 404);
   }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      movie,
+    },
+  });
+});
+
+exports.createMovie = catchAsync(async (req, res, next) => {
+  const newMovie = await Movie.create(req.body);
+  res.status(201).json({
+    status: "success",
+    data: {
+      movie: newMovie,
+    },
+  });
+});
+
+exports.updateMovie = catchAsync(async (req, res, next) => {
+  const movie = await Movie.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!movie) {
+    return next(new AppError(`can't find movie with this id`, 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      movie,
+    },
+  });
   // const id = req.params.id * 1;
   // const movie = movies.find((el) => el.id === id);
 
   // for (let key in req.body) {
   //   movie[key] = req.body.key;
   // }
-};
+});
 
-exports.deleteMovie = async (req, res) => {
-  try {
-    await Movie.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: {
-        movie: null,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+exports.deleteMovie = catchAsync(async (req, res, next) => {
+  const tour = await Movie.findByIdAndDelete(req.params.id);
+
+  if (!movie) {
+    return next(new AppError(`can't find movie with this id`, 404));
   }
-  const id = req.params.id * 1;
-  const index = movies.findIndex((el) => el.id === id);
 
-  movies.splice(index, 1);
   res.status(204).json({
     status: "success",
     data: {
       movie: null,
     },
   });
-};
+  // const id = req.params.id * 1;
+  // const index = movies.findIndex((el) => el.id === id);
 
-exports.getYourStat = async (req, res) => {
-  try {
-    const stat = await Movie.aggregate([
-      {
-        $match: { ratingAvg: { $gte: 4.0 } },
-      },
-      {
-        $group: {
-          _id: { $toUpper: { $toString: "$watched" } },
-          numMovies: { $sum: 1 },
-          avgRating: { $avg: "$ratingAvg" },
-          totalPrice: { $sum: "$price" },
-        },
-      },
-    ]);
+  // movies.splice(index, 1);
+  // res.status(204).json({
+  //   status: "success",
+  //   data: {
+  //     movie: null,
+  //   },
+  // });
+});
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        stat,
+exports.getYourStat = catchAsync(async (req, res, next) => {
+  const stat = await Movie.aggregate([
+    {
+      $match: { ratingAvg: { $gte: 4.0 } },
+    },
+    {
+      $group: {
+        _id: { $toUpper: { $toString: "$watched" } },
+        numMovies: { $sum: 1 },
+        avgRating: { $avg: "$ratingAvg" },
+        totalPrice: { $sum: "$price" },
       },
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
-};
+    },
+  ]);
 
-exports.yearlyStat = async (req, res) => {
-  try {
-    const Year = req.params.year * 1;
-    const stat = await Movie.aggregate([
-      { $unwind: "$watched_date" },
-      {
-        $match: {
-          watched_date: {
-            $gte: new Date(`${Year}-01-01`),
-            $lte: new Date(`${Year}-12-31`),
-          },
+  res.status(200).json({
+    status: "success",
+    data: {
+      stat,
+    },
+  });
+});
+
+exports.yearlyStat = catchAsync(async (req, res, next) => {
+  const Year = req.params.year * 1;
+  const stat = await Movie.aggregate([
+    { $unwind: "$watched_date" },
+    {
+      $match: {
+        watched_date: {
+          $gte: new Date(`${Year}-01-01`),
+          $lte: new Date(`${Year}-12-31`),
         },
       },
-      {
-        $group: {
-          _id: { $month: "$watched_date" },
-          numofmovies: { $sum: 1 },
-          movies: { $push: "$title" },
-          totalPrice: { $sum: "$price" },
-          avgRating: { $avg: "$ratingAvg" },
-        },
+    },
+    {
+      $group: {
+        _id: { $month: "$watched_date" },
+        numofmovies: { $sum: 1 },
+        movies: { $push: "$title" },
+        totalPrice: { $sum: "$price" },
+        avgRating: { $avg: "$ratingAvg" },
       },
-      {
-        $addFields: {
-          month: "$_id",
-        },
+    },
+    {
+      $addFields: {
+        month: "$_id",
       },
-      {
-        $project: {
-          _id: 0,
-        },
+    },
+    {
+      $project: {
+        _id: 0,
       },
-      {
-        $sort: { numofmovies: -1 },
-      },
-      {
-        $limit: 12,
-      },
-    ]);
-    res.status(200).json({
-      status: "success",
-      data: {
-        stat,
-      },
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
-};
+    },
+    {
+      $sort: { numofmovies: -1 },
+    },
+    {
+      $limit: 12,
+    },
+  ]);
+  res.status(200).json({
+    status: "success",
+    data: {
+      stat,
+    },
+  });
+});

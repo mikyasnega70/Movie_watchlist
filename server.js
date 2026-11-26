@@ -10,7 +10,9 @@ mongoose.connect(DB).then((con) => console.log("DB connected successfully"));
 
 // const DB_LOCAL = process.env.DATABASE_LOCAL;
 
-// mongoose.connect(DB_LOCAL).then(con=> console.log('DB connected successfully'));
+// mongoose
+//   .connect(DB_LOCAL)
+//   .then((con) => console.log("DB connected successfully"));
 
 const PORT = 3000;
 app.listen(PORT, () => {
